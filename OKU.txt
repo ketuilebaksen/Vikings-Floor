@@ -1,0 +1,120 @@
+VIKINGS FLOOR — KANAL KURULUMU
+===============================
+
+Takim: Minnesota Vikings | Stadyum: U.S. Bank Stadium
+Bas antrenor Kevin O'Connell. Kadroda Justin Jefferson, Jordan Addison,
+T.J. Hockenson, Aaron Jones, Byron Murphy, Harrison Smith, Dallas Turner.
+
+QUARTERBACK NOTU: Resmi kadroda Kyler Murray, Carson Wentz ve Max Brosmer
+var — J.J. McCarthy aktif kadroda gorunmuyor. Murray 1. haftada Packers
+macinda sarsinti gecirdi, yerine Wentz girdi.
+
+GENEL MENAJER NOTU: Kwesi Adofo-Mensah gorevden alindi. Yerine gecen ismi
+dogrulayamadim, o yuzden kadro listesine koc disinda yonetici koymadim.
+Dogrusunu biliyorsan soyle, channel.json'a eklerim.
+
+
+25.000 KARAKTER NE DEMEK — ONEMLI
+----------------------------------
+Hesapladim: 25.000 karakter ~4.400 kelime ~28 dakikalik video.
+Bu diger NFL kanallarinin (3-5 dakika) alti kati. Uc seyi buna gore
+ayarladim:
+
+1) KESIM HIZI
+   body_cut 3,4 yerine 3,9 yaptim. 3,4 ile 28 dakikada 500 kesim olurdu,
+   izleyiciyi yorar. 3,9 ile ~435 kesim.
+   Cok yavas gelirse channel.json'da 3,5'e cekebilirsin.
+
+2) EKRANA YAZI SIKLIGI
+   overlay_every_sec 25 yerine 30. 25 kalsaydi videoda 68 yazi olurdu.
+
+3) STOK HAVUZU
+   Her videoya havuzdan secilen klip sayisini 320'den 420'ye cikardim.
+   435 kesim / 420 klip = klip basina 1,0 kullanim, yani neredeyse her
+   kesime ayri goruntu. 320 kalsaydi 1,4 olurdu.
+
+   >>> Bu yuzden broll release'ine EN AZ 500 klip koy. 420'den az klip
+   varsa sistem elindekini kullanir ama tekrar baslar.
+
+RENDER SURESI: 75-100 dakika bekle. Diger NFL kanallari 3-5 dakikada
+bitiyor, bu normal — video 6 kat uzun. Is siniri 330 dakika, sorun degil,
+"takildi mi" diye panige kapilma.
+
+DOSYA BOYUTU: ~1 GB civari olacak. GitHub release'e tek dosyada 2 GB'a
+kadar kabul ediyor, yani sigiyor. Kaliteyi yukseltmek istersen (CRF_CUT)
+once bu siniri dusun.
+
+
+ADIM 1 — DEPO
+-------------
+Depo adi icin Vikings-Floor oneriyorum.
+"Add a README" kutusunu ISARETLEME — isaretlersen push "unrelated
+histories" hatasi verir ve force push gerekir (son dort kanalda oldu).
+
+Zaten README ile actiysan:
+  Repository -> Open in Command Prompt  (Ctrl + `)
+  git push --force origin main
+
+
+ADIM 2 — DOSYALARI KOPYALA
+--------------------------
+Bu zip'in icindekileri (OKU.txt haric) depo klasorune kopyala.
+
+Klasorde su kalmali:
+  .git  .github  assets  content  scripts  .gitignore  channel.json
+
+.github ve content Windows'ta gizli gorunebilir — "Hidden items" kutusunu ac.
+
+GitHub Desktop -> Summary: "ilk kurulum" -> Commit to main -> Push origin
+
+
+ADIM 3 — IZIN (sart)
+--------------------
+Settings -> Actions -> General -> en altta "Workflow permissions"
+"Read and write permissions" sec -> Save
+
+Bu olmadan video render edilir ama Release'e yuklenemez.
+
+
+ADIM 4 — STOK VIDEOLAR
+----------------------
+Releases -> Create a new release
+  Tag / Title : broll
+  Dosya       : Vikings stok videolarini surukle (en az 500)
+  ---> "Publish release"   ("Save draft" e BASMA)
+
+Bir release'e 1000 dosya siginiyor, dolunca broll2 ac.
+Istege bagli:  music   ambient   photos
+
+music'e hem mp3 hem wav atabilirsin, sistem kopyalari birlestiriyor.
+28 dakikalik video icin en az 10-12 parca koy.
+
+
+ADIM 5 — ILK VIDEO
+------------------
+Ses otomasyonunda kanal listesine ekle, depo adi: Vikings-Floor
+
+Render kaydinda goreceklerin:
+  STOK HAVUZU: ... klipten 420 tanesi bu video icin secildi
+  [assemble] sahne cesitliligi: ... farkli cekim ailesi
+  [assemble] music bed: ... parca, ... kez eklendi
+  [assemble] DONE -> work/final.mp4 (28.3 min)
+
+"b-roll: 0 clips" yaziyorsa broll release'i taslakta kalmis demektir.
+
+
+TEMPO AYARLARI
+--------------
+channel.json'da ilk videodan sonra oynayabilecegin uc deger:
+  "hook_cut": 2.8           acilisin kesim hizi
+  "body_cut": 3.9           govdenin kesim hizi (dusuk = daha hizli)
+  "overlay_every_sec": 30   ekrana yazi gelme sikligi
+
+Ilk videoyu izleyip bana soyle, birlikte ayarlariz.
+
+
+ISTEGE BAGLI — TEK OYUNCUYA OZEL HAVUZ
+--------------------------------------
+  Release tag : oyuncu-justin-jefferson  (ya da takim-minnesota-vikings)
+  Icine en az 12 klip koy, Publish et.
+Metinde o isim en cok geciyorsa video sadece o havuzdan kurulur.
